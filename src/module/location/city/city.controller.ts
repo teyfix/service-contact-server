@@ -1,15 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CityInterface } from './city.interface';
+import { CityService } from 'src/module/location/city/city.service';
 
 @Controller('city')
 export class CityController {
-  constructor(@InjectModel('City') private readonly cityModel: Model<CityInterface>) {
+  constructor(private readonly cityService: CityService) {
   }
 
   @Get()
   async getCities() {
-    return this.cityModel.find({});
+    return this.cityService.all();
   }
 }

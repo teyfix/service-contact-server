@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { FaultService } from 'src/module/panel/fault/fault.service';
 import { CreateFaultDto } from 'src/module/panel/fault/dto/create-fault.dto';
 import { UpdateFaultDto } from 'src/module/panel/fault/dto/update-fault.dto';
+import { PaginateDto } from 'src/dto/paginate.dto';
 
 @Controller('fault')
 export class FaultController {
@@ -11,6 +12,11 @@ export class FaultController {
   @Get()
   async getAllFaults() {
     return this.faultService.all();
+  }
+
+  @Get('paginate')
+  async paginate(@Query() query: PaginateDto) {
+    return this.faultService.paginate(query);
   }
 
   @Get(':id')

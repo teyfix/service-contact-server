@@ -6,6 +6,7 @@ import { CitySchema } from './city/city.schema';
 import { DistrictSchema } from './district/district.schema';
 import { ProvinceSchema } from './province/province.schema';
 import { NeighborhoodSchema } from './neighborhood/neighborhood.schema';
+import { CityService } from './city/city.service';
 
 @Module({
   imports: [
@@ -17,8 +18,9 @@ import { NeighborhoodSchema } from './neighborhood/neighborhood.schema';
       {name: 'Neighborhood', schema: NeighborhoodSchema},
     ]),
   ],
-  exports: [MongooseModule],
+  exports: [MongooseModule, CityService],
   controllers: [CityController],
+  providers: [CityService],
 })
 export class LocationModule {
 }

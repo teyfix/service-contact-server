@@ -8,7 +8,7 @@ export class CreateDealerDto {
   title: string;
 
   @IsMongoId()
-  city: CityInterface;
+  city: string | CityInterface;
 
   @IsPhone()
   phone: string;

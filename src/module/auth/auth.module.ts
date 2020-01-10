@@ -16,7 +16,7 @@ import { ResetPasswordController } from 'src/module/auth/reset-password/reset-pa
     ]),
     JwtModule.register({
       secret: process.env.jwtSecret,
-      signOptions: {expiresIn: '10m'},
+      signOptions: {expiresIn: '1d'},
     }),
   ],
   exports: [MongooseModule, AuthService],

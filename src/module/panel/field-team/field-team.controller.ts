@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { FieldTeamService } from 'src/module/panel/field-team/field-team.service';
 import { CreateFieldTeamDto } from 'src/module/panel/field-team/dto/create-field-team.dto';
 import { UpdateFieldTeamDto } from 'src/module/panel/field-team/dto/update-field-team.dto';
+import { PaginateDto } from 'src/dto/paginate.dto';
 
 @Controller('field-team')
 export class FieldTeamController {
@@ -11,6 +12,11 @@ export class FieldTeamController {
   @Get()
   getAllFieldTeams() {
     return this.fieldTeamService.all();
+  }
+
+  @Get('paginate')
+  async paginate(@Query() query: PaginateDto) {
+    return this.fieldTeamService.paginate(query);
   }
 
   @Get(':id')

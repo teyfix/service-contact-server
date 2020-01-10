@@ -1,8 +1,9 @@
 import { Model } from 'mongoose';
 import { BaseInterface } from 'src/mongo/base.interface';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { PaginateDto } from 'src/dto/paginate.dto';
 
-export class BaseService<Interface extends BaseInterface, CreateDto, UpdateDto> {
+export class BaseService<Interface extends BaseInterface, CreateDto = any, UpdateDto = any> {
   constructor(private readonly model: Model<Interface>) {
   }
 
@@ -11,10 +12,17 @@ export class BaseService<Interface extends BaseInterface, CreateDto, UpdateDto> 
   }
 
   async get(id: string) {
-    const entity = this.model.findById(id);
+    try {
 
-    if (entity) {
-      return entity;
+      const entity = await this.model.findById(id);
+
+      if (entity) {
+        return entity;
+      }
+    } catch (e) {
+      if (e.name === 'CastError') {
+        throw new UnprocessableEntityException('Cast to ' + e.kind + ' failed for value "' + e.stringValue + '"');
+      }
     }
 
     throw new NotFoundException();
@@ -52,5 +60,12 @@ export class BaseService<Interface extends BaseInterface, CreateDto, UpdateDto> 
 
   async remove(id: string) {
     return this.get(id).then(_ => _.remove());
+  }
+
+  async paginate(paginateDto: PaginateDto) {
+    return {
+      data: await this.model.find().skip(+paginateDto.skip || 0).limit(+paginateDto.limit || 20),
+      count: await this.count(),
+    };
   }
 }

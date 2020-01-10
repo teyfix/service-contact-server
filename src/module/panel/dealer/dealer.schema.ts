@@ -1,10 +1,10 @@
 import { BaseSchema } from 'src/mongo/base.schema';
-import { idValidator } from 'src/mongo/plugin/id-validator.plugin';
+import { autopopulate } from 'src/mongo/plugin/autopopulate.plugin';
 
 export const DealerSchema = new BaseSchema({
   title: String,
-  city: {type: BaseSchema.Types.ObjectId, ref: 'City', required: true},
-  phone: {type: String, required: true},
+  city: {type: BaseSchema.Types.ObjectId, ref: 'City', autopopulate: true},
+  phone: String,
 });
 
-DealerSchema.plugin(idValidator);
+DealerSchema.plugin(autopopulate);
