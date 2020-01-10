@@ -3,8 +3,11 @@ import { FaultService } from 'src/module/panel/fault/fault.service';
 import { CreateFaultDto } from 'src/module/panel/fault/dto/create-fault.dto';
 import { UpdateFaultDto } from 'src/module/panel/fault/dto/update-fault.dto';
 import { PaginateDto } from 'src/dto/paginate.dto';
+import { MinRole } from 'src/decorator/min-role';
+import { Role } from 'src/module/auth/user/user.interface';
 
 @Controller('fault')
+@MinRole(Role.Moderator)
 export class FaultController {
   constructor(private readonly faultService: FaultService) {
   }
@@ -30,7 +33,7 @@ export class FaultController {
   }
 
   @Patch(':id')
-  async updateFault(@Param() {id}, updateFaultDto: UpdateFaultDto) {
+  async updateFault(@Param() {id}, @Body() updateFaultDto: UpdateFaultDto) {
     return this.faultService.getAndUpdate(id, updateFaultDto);
   }
 

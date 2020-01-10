@@ -43,15 +43,19 @@ export class BaseService<Interface extends BaseInterface, CreateDto = any, Updat
   }
 
   async getAndUpdate(id: string, updateDto: UpdateDto) {
-    return this.get(id).then(_ => _.updateOne(updateDto, {new: true}));
+    const entity = await this.get(id);
+
+    await entity.updateOne(updateDto, {new: true});
+
+    return this.get(id);
   }
 
-  async count(query?) {
-    return this.model.count(query || {});
+  async countDocuments(query?) {
+    return this.model.countDocuments(query || {});
   }
 
   async available(query) {
-    if (await this.count(query)) {
+    if (await this.countDocuments(query)) {
       throw new ConflictException();
     }
 
@@ -65,7 +69,7 @@ export class BaseService<Interface extends BaseInterface, CreateDto = any, Updat
   async paginate(paginateDto: PaginateDto) {
     return {
       data: await this.model.find().skip(+paginateDto.skip || 0).limit(+paginateDto.limit || 20),
-      count: await this.count(),
+      count: await this.countDocuments(),
     };
   }
 }

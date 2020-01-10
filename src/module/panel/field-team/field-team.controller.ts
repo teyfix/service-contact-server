@@ -3,8 +3,11 @@ import { FieldTeamService } from 'src/module/panel/field-team/field-team.service
 import { CreateFieldTeamDto } from 'src/module/panel/field-team/dto/create-field-team.dto';
 import { UpdateFieldTeamDto } from 'src/module/panel/field-team/dto/update-field-team.dto';
 import { PaginateDto } from 'src/dto/paginate.dto';
+import { MinRole } from 'src/decorator/min-role';
+import { Role } from 'src/module/auth/user/user.interface';
 
 @Controller('field-team')
+@MinRole(Role.Moderator)
 export class FieldTeamController {
   constructor(private readonly fieldTeamService: FieldTeamService) {
   }
@@ -30,7 +33,7 @@ export class FieldTeamController {
   }
 
   @Patch(':id')
-  async updateFieldTeam(@Param() {id}, updateFieldTeamDto: UpdateFieldTeamDto) {
+  async updateFieldTeam(@Param() {id}, @Body() updateFieldTeamDto: UpdateFieldTeamDto) {
     return this.fieldTeamService.getAndUpdate(id, updateFieldTeamDto);
   }
 

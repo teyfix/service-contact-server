@@ -4,8 +4,11 @@ import { CreateFaultRecordDto } from 'src/module/panel/fault-record/dto/create-f
 import { UpdateFaultRecordDto } from 'src/module/panel/fault-record/dto/update-fault-record.dto';
 import { PaginateDto } from 'src/dto/paginate.dto';
 import { FieldTeamService } from 'src/module/panel/field-team/field-team.service';
+import { MinRole } from 'src/decorator/min-role';
+import { Role } from 'src/module/auth/user/user.interface';
 
 @Controller('fault-record')
+@MinRole(Role.Moderator)
 export class FaultRecordController {
   constructor(
     private readonly fieldTeamService: FieldTeamService,
@@ -41,7 +44,7 @@ export class FaultRecordController {
   }
 
   @Patch(':id')
-  async updateFaultRecord(@Param() {id}, updateFaultRecordDto: UpdateFaultRecordDto) {
+  async updateFaultRecord(@Param() {id}, @Body() updateFaultRecordDto: UpdateFaultRecordDto) {
     return this.faultRecordService.getAndUpdate(id, updateFaultRecordDto);
   }
 

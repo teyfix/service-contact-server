@@ -41,7 +41,7 @@ export class DealerController {
   }
 
   @Patch(':id')
-  async updateDealer(@Param() {id}, updateDealerDto: UpdateDealerDto) {
+  async updateDealer(@Param() {id}, @Body() updateDealerDto: UpdateDealerDto) {
     return this.dealerService.getAndUpdate(id, updateDealerDto);
   }
 
